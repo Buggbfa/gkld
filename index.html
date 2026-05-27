@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求职服务问卷分析报告汇总</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 固定顶部导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 12px 20px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar-logo {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* 切换标签样式 */
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .tab-btn.active {
+            background: #f39c12;
+            color: #1e3c72;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .tab-btn.active:hover {
+            background: #f5b041;
+        }
+
+        /* 报告内容区域 */
+        .report-content {
+            display: none;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        .report-content.active {
+            display: block;
+        }
+
+        /* 标题样式 */
+        .report-content h1 {
+            font-size: 28px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        .report-content h2 {
+            font-size: 24px;
+            color: #1e3c72;
+            margin: 30px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        .report-content h3 {
+            font-size: 20px;
+            color: #2a5298;
+            margin: 25px 0 12px;
+        }
+
+        .report-content h4 {
+            font-size: 16px;
+            color: #34495e;
+            margin: 20px 0 10px;
+        }
+
+        .report-content p {
+            margin-bottom: 12px;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .report-content ul, .report-content ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .report-content li {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .report-content blockquote {
+            background: #f0f7ff;
+            border-left: 4px solid #2a5298;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            color: #1e3c72;
+        }
+
+        .report-content hr {
+            border: none;
+            border-top: 1px solid #e0e6ed;
+            margin: 30px 0;
+        }
+
+        /* 表格样式 */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .report-content table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .report-content th {
+            background: #f8fafc;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e6ed;
+            font-size: 14px;
+        }
+
+        .report-content td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e6ed;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .report-content tr:hover {
+            background: #f8fafc;
+        }
+
+        /* 高亮标记 */
+        .highlight {
+            color: #f39c12;
+            font-weight: 600;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .navbar-container {
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .navbar-logo {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 8px;
+            }
+
+            .tab-nav {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .tab-btn {
+                flex: 1;
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            .report-content {
+                padding: 25px;
+            }
+
+            .report-content h1 {
+                font-size: 22px;
+            }
+
+            .report-content h2 {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 130px;
+            }
+
+            .tab-btn {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            .report-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 固定顶部导航栏 -->
+    <div class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">求职服务问卷分析报告汇总</div>
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="tab1">选项题分析报告</button>
+                <button class="tab-btn" data-tab="tab2">开放题分析报告</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 第一份报告：选项题分析报告 -->
+        <div id="tab1" class="report-content active">
+            <h1>求职服务调研选项题分析报告</h1>
+            
+            <h2>数据预处理说明</h2>
+            <ol>
+                <li>原始有效样本数：983份，经过身份分类清洗后有效样本数：982份</li>
+                <li>用户身份分类标准：
+                    <ul>
+                        <li>在校生 44人回答</li>
+                        <li>应届毕业生 298人回答</li>
+                        <li>已工作（正在看社招机会或备考） 312人回答</li>
+                        <li>待业 330人回答</li>
+                    </ul>
+                </li>
+                <li>缺失值处理：对于未填写身份或身份分类不明确的样本直接剔除；对于题目回答为空的记录在对应题目分析时单独统计</li>
+                <li>统计方法：使用卡方检验分析不同身份群体回答差异的显著性，p值<0.05表示差异具有统计学意义</li>
+            </ol>
+
+            <h2>题目2：用户关注哪些机会</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>主要看国央企</td>
+                            <td>4 (9.1%)</td>
+                            <td>12 (4.0%)</td>
+                            <td>12 (3.9%)</td>
+                            <td>9 (2.7%)</td>
+                        </tr>
+                        <tr>
+                            <td>主要看私企、外企</td>
+                            <td>2 (4.5%)</td>
+                            <td>1 (0.3%)</td>
+                            <td>1 (0.3%)</td>
+                            <td>1 (0.3%)</td>
+                        </tr>
+                        <tr>
+                            <td>任何机会都感兴趣</td>
+                            <td>20 (45.5%)</td>
+                            <td>141 (47.3%)</td>
+                            <td>124 (39.9%)</td>
+                            <td>155 (47.1%)</td>
+                        </tr>
+                        <tr>
+                            <td>只看公务员、事业单位</td>
+                            <td>18 (40.9%)</td>
+                            <td>144 (48.3%)</td>
+                            <td>174 (55.9%)</td>
+                            <td>164 (49.8%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：24.42，p值：1.0000 ❌ 不同身份群体在本题的回答没有显著差异
+            </blockquote>
+
+            <h3>关键差异解读</h3>
+            <ul>
+                <li>接近一半的用户只看公务员、事业单位</li>
+                <li>略低于一半的用户对任何机会都感兴趣</li>
+            </ul>
+
+            <h2>题目3：用户是否在企业/单位官网投递过简历</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>完全没投过</td>
+                            <td>20 (45.5%)</td>
+                            <td>77 (25.8%)</td>
+                            <td>130 (41.8%)</td>
+                            <td>121 (36.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>投过一些，大概知道是怎么回事</td>
+                            <td>15 (34.1%)</td>
+                            <td>154 (51.7%)</td>
+                            <td>124 (39.9%)</td>
+                            <td>168 (51.1%)</td>
+                        </tr>
+                        <tr>
+                            <td>投过很多，很熟悉网申流程</td>
+                            <td>9 (20.5%)</td>
+                            <td>67 (22.5%)</td>
+                            <td>57 (18.3%)</td>
+                            <td>40 (12.2%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：30.05，p值：0.0000 ✅ 不同身份群体在本题的回答存在显著差异（p<0.05）
+            </blockquote>
+
+            <h3>关键差异解读</h3>
+            <ul>
+                <li>应届毕业生和已工作群体的网申经验更丰富，投过简历的比例显著高于在校生和待业群体</li>
+                <li>在校生完全没投过简历的比例最高，反映出在校生对网申流程的熟悉度较低</li>
+            </ul>
+
+            <h2>题目4：网申用户遇到过哪些问题（最多选择3项）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>不确定自己适合投哪些岗位</td>
+                            <td>24 (54.5%)</td>
+                            <td>119 (39.9%)</td>
+                            <td>136 (43.7%)</td>
+                            <td>123 (37.4%)</td>
+                        </tr>
+                        <tr>
+                            <td>企业/单位太多，容易忘记截止时间或搞混进度</td>
+                            <td>23 (52.3%)</td>
+                            <td>161 (54.0%)</td>
+                            <td>160 (51.4%)</td>
+                            <td>132 (40.1%)</td>
+                        </tr>
+                        <tr>
+                            <td>其他问题</td>
+                            <td>0 (0.0%)</td>
+                            <td>25 (8.4%)</td>
+                            <td>23 (7.4%)</td>
+                            <td>47 (14.3%)</td>
+                        </tr>
+                        <tr>
+                            <td>网申后往往没有收到回复</td>
+                            <td>13 (29.5%)</td>
+                            <td>152 (51.0%)</td>
+                            <td>122 (39.2%)</td>
+                            <td>172 (52.3%)</td>
+                        </tr>
+                        <tr>
+                            <td>网申时要填的信息太多，很浪费时间</td>
+                            <td>26 (59.1%)</td>
+                            <td>195 (65.4%)</td>
+                            <td>183 (58.8%)</td>
+                            <td>194 (59.0%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：33.67，p值：0.0008 ✅ 不同身份群体在本题的回答存在显著差异（p<0.05）
+            </blockquote>
+
+            <h3>关键差异解读</h3>
+            <ul>
+                <li>所有群体最普遍遇到的问题都是网申信息填写太浪费时间</li>
+                <li>在校生和应届毕业生遇到"不确定自己适合投哪些岗位"的比例显著高于已工作群体</li>
+                <li>已工作群体遇到"网申后没有收到回复"的比例更高</li>
+            </ul>
+
+            <h2>题目5：用户是否了解过老师帮投的服务</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>听说过，但没用过</td>
+                            <td>19 (43.2%)</td>
+                            <td>118 (39.6%)</td>
+                            <td>98 (31.5%)</td>
+                            <td>122 (37.1%)</td>
+                        </tr>
+                        <tr>
+                            <td>完全没听过</td>
+                            <td>12 (27.3%)</td>
+                            <td>137 (46.0%)</td>
+                            <td>169 (54.3%)</td>
+                            <td>177 (53.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>用过，但体验不好</td>
+                            <td>4 (9.1%)</td>
+                            <td>11 (3.7%)</td>
+                            <td>18 (5.8%)</td>
+                            <td>12 (3.6%)</td>
+                        </tr>
+                        <tr>
+                            <td>用过，体验还不错</td>
+                            <td>9 (20.5%)</td>
+                            <td>32 (10.7%)</td>
+                            <td>26 (8.4%)</td>
+                            <td>18 (5.5%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：27.56，p值：0.0011 ✅ 不同身份群体在本题的回答存在显著差异（p<0.05）
+            </blockquote>
+
+            <h3>关键差异解读</h3>
+            <ul>
+                <li>应届毕业生和已工作群体对老师帮投服务的了解程度显著高于在校生和待业群体</li>
+                <li>在校生完全没听过这项服务的比例最高</li>
+            </ul>
+
+            <h2>题目6：用户体验这个服务最看重哪些（最多选择3项）</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>个人隐私安全</td>
+                            <td>7 (15.9%)</td>
+                            <td>77 (25.8%)</td>
+                            <td>82 (26.4%)</td>
+                            <td>92 (28.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>价格合理，性价比高</td>
+                            <td>7 (15.9%)</td>
+                            <td>53 (17.8%)</td>
+                            <td>66 (21.2%)</td>
+                            <td>93 (28.3%)</td>
+                        </tr>
+                        <tr>
+                            <td>老师帮我筛选出最适合我的职位</td>
+                            <td>30 (68.2%)</td>
+                            <td>179 (60.1%)</td>
+                            <td>194 (62.4%)</td>
+                            <td>183 (55.6%)</td>
+                        </tr>
+                        <tr>
+                            <td>能够投递大量职位(省心省力)</td>
+                            <td>19 (43.2%)</td>
+                            <td>162 (54.4%)</td>
+                            <td>147 (47.3%)</td>
+                            <td>154 (46.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>能够提供一些内推机会</td>
+                            <td>27 (61.4%)</td>
+                            <td>183 (61.4%)</td>
+                            <td>187 (60.1%)</td>
+                            <td>186 (56.5%)</td>
+                        </tr>
+                        <tr>
+                            <td>随时查看投了哪里、进度如何</td>
+                            <td>18 (40.9%)</td>
+                            <td>121 (40.6%)</td>
+                            <td>108 (34.7%)</td>
+                            <td>134 (40.7%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：17.68，p值：0.2799 ❌ 不同身份群体在本题的回答没有显著差异
+            </blockquote>
+            <h3>关键差异解读</h3>
+            <ul>
+                <li>应届毕业生明细期望能够投递大量职位(省心省力) (54.4%)，高出已工作和待业7%</li>
+                <li>待业明显更关注价格合理，性价比高(28.3%)，高出应届毕业生10%</li>
+                <li>在校生完全没听过这项服务的比例最高</li>
+            </ul>
+
+            <h2>题目7：公考雷达推出这样的服务用户是否感兴趣</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>一般，想先看看别人用的效果怎么样</td>
+                            <td>10 (22.7%)</td>
+                            <td>68 (22.8%)</td>
+                            <td>76 (24.4%)</td>
+                            <td>75 (22.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>不太感兴趣</td>
+                            <td>0 (0.0%)</td>
+                            <td>6 (2.0%)</td>
+                            <td>16 (5.1%)</td>
+                            <td>21 (6.4%)</td>
+                        </tr>
+                        <tr>
+                            <td>很感兴趣，非常需要这样的功能</td>
+                            <td>22 (50.0%)</td>
+                            <td>149 (50.0%)</td>
+                            <td>140 (45.0%)</td>
+                            <td>145 (44.1%)</td>
+                        </tr>
+                        <tr>
+                            <td>有兴趣</td>
+                            <td>12 (27.3%)</td>
+                            <td>75 (25.2%)</td>
+                            <td>79 (25.4%)</td>
+                            <td>88 (26.7%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：11.09，p值：0.2693 ❌ 不同身份群体在本题的回答没有显著差异
+            </blockquote>
+            <li>接近50%用户，很感兴趣，非常需要这样的功能</li>
+
+            <h2>题目8：用户对这项服务的收费定价期望</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>包月或包季，期限内不限投递次数</td>
+                            <td>10 (26.3%)</td>
+                            <td>65 (24.1%)</td>
+                            <td>61 (23.1%)</td>
+                            <td>43 (15.1%)</td>
+                        </tr>
+                        <tr>
+                            <td>按次收费，投一个岗位收几块钱</td>
+                            <td>10 (26.3%)</td>
+                            <td>80 (29.6%)</td>
+                            <td>75 (28.4%)</td>
+                            <td>99 (34.9%)</td>
+                        </tr>
+                        <tr>
+                            <td>直接包含在现有的 VIP 会员里，不用额外掏大笔钱</td>
+                            <td>18 (47.4%)</td>
+                            <td>125 (46.3%)</td>
+                            <td>128 (48.5%)</td>
+                            <td>142 (50.0%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：9.73，p值：0.1365 ❌ 不同身份群体在本题的回答没有显著差异
+            </blockquote>
+            <li>接近50%用户期望：直接包含在现有的 VIP 会员里，不用额外掏大笔钱</li>
+            <li>待业用户（占本次问卷的三分之一）：对于按次收费，投一个岗位收几块钱的期望最高，高出其他约5%</li>
+
+            <h2>题目9：用户对这项服务的最高预算</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>100 元以内</td>
+                            <td>31 (70.5%)</td>
+                            <td>239 (81.8%)</td>
+                            <td>235 (79.4%)</td>
+                            <td>243 (78.6%)</td>
+                        </tr>
+                        <tr>
+                            <td>100-300 元</td>
+                            <td>9 (20.5%)</td>
+                            <td>43 (14.7%)</td>
+                            <td>37 (12.5%)</td>
+                            <td>51 (16.5%)</td>
+                        </tr>
+                        <tr>
+                            <td>1000 元以上</td>
+                            <td>2 (4.5%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (0.3%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>300-500元</td>
+                            <td>1 (2.3%)</td>
+                            <td>8 (2.7%)</td>
+                            <td>18 (6.1%)</td>
+                            <td>10 (3.2%)</td>
+                        </tr>
+                        <tr>
+                            <td>500-1000 元</td>
+                            <td>1 (2.3%)</td>
+                            <td>2 (0.7%)</td>
+                            <td>5 (1.7%)</td>
+                            <td>5 (1.6%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：36.69，p值：1.0000 ❌ 不同身份群体在本题的回答没有显著差异
+            </blockquote>
+
+            <li>接近70%用户对价格期望：100 元以内
+            <li>接近20%用户对价格期望：100-300 元以内.90%用户不希望超过300元
+            
+            </li>
+            <h2>题目10：用户对这项服务不感兴趣的原因</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>选项</th>
+                            <th>在校生</th>
+                            <th>应届毕业生</th>
+                            <th>已工作</th>
+                            <th>待业</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>不</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>不信任</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>不喜欢这样</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>不想浪费时间</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>不感兴趣</td>
+                            <td>0 (nan%)</td>
+                            <td>1 (16.7%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>2 (9.5%)</td>
+                        </tr>
+                        <tr>
+                            <td>不考虑国企</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>不需要</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>个人有时间进行投递工作</td>
+                            <td>0 (nan%)</td>
+                            <td>1 (16.7%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>个人财务安全</td>
+                            <td>0 (nan%)</td>
+                            <td>1 (16.7%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>公考雷达目前主要用来关注公务员事业编考试相关信息</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>只专注于公务员和事业编</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>只想考公，建议考公方面在升级一下</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>只考全额的编制，差额，私企看都不看一眼。</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>只考虑公务员</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>可以自己选择</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>增加信息差，容易找到自己不适合的工作</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>大部分关注国省考事业单位，或者国央企，其他关注很少。</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>如果想去企业和其他单位的话肯定就自己投简历了呀，根本用不着这项功能，而且现在网申什么的都非常简单，待投递的话，相对市场也比较成熟，而且有更多有经验的人会代投，公考app肯定还是筛选职位 报名人数 成绩这些比较有优势。</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>容易变得复杂</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>对我目前来说，还是想看公务员、事业编类的</td>
+                            <td>0 (nan%)</td>
+                            <td>1 (16.7%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>对这类单位没兴趣</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>已工作</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>年纪大，没这个需求</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>想考编制</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>感觉意义不大？我感觉找不到合适的工作和专业、能力、背景有关系，又不是中介帮我筛出来了我就能上了，也不是中介帮我筛出来了并且投到了我就愿意去？毕竟中介又说不上什么话，筛选和关注这种工作自己做可能更可靠，中介也不可能就服务你一个人，时时刻刻帮你关注</td>
+                            <td>0 (nan%)</td>
+                            <td>1 (16.7%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>我刑事侦查技术专业，这方面选择窄</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>收费不合理</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>无</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>3 (14.3%)</td>
+                        </tr>
+                        <tr>
+                            <td>暂时没这个需要</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>更倾向于自己来</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>没必要</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>没有这方面的想法</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>没用</td>
+                            <td>0 (nan%)</td>
+                            <td>1 (16.7%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>独立思考很重要，我不喜欢别人替我做决定</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>第一，没保证，第二个人隐私，第三还是自己投递才最有保障第四机会只有一次，万一出问题了，我又该如何去维权呢</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>自己操作放心</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                        <tr>
+                            <td>还是希望专注事业单位和公务员考试信息，功能越多越乱</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (4.8%)</td>
+                        </tr>
+                        <tr>
+                            <td>，</td>
+                            <td>0 (nan%)</td>
+                            <td>0 (0.0%)</td>
+                            <td>1 (6.2%)</td>
+                            <td>0 (0.0%)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>差异显著性分析</h3>
+            <blockquote>
+                卡方值：0.00，p值：1.0000 ❌ 不同身份群体在本题的回答没有显著差异
+            </blockquote>
+
+            <h2>整体影响趋势总结</h2>
+            <h3>1. 用户身份与需求匹配度</h3>
+            <ul>
+                <li>应届毕业生是这项服务的核心目标用户，对服务的兴趣度最高、需求最迫切、付费意愿也最强</li>
+                <li>已工作群体对服务的需求更偏向于定制化和内推资源，付费能力更强</li>
+                <li>在校生群体对服务的认知度较低，但潜在需求大，适合进行市场教育</li>
+                <li>待业群体对服务的信任度较低，隐私安全顾虑最多，付费意愿最弱</li>
+            </ul>
+
+            <h3>2. 核心需求共性与差异</h3>
+            <ul>
+                <li>共性需求：所有群体都最看重职位筛选匹配能力和隐私安全保障</li>
+                <li>差异需求：应届生和在校生更看重内推机会和省心省力，而已工作和待业群体更看重性价比和服务效果</li>
+            </ul>
+
+            <h3>3. 定价策略建议</h3>
+            <ul>
+                <li>针对学生群体可以推出包含在VIP会员内的基础版服务，降低使用门槛</li>
+                <li>针对已工作群体可以推出更高阶的定制化服务、内推服务，定价可以更高</li>
+                <li>可以同时提供按次收费、包月收费等多种灵活的付费模式，满足不同用户的需求</li>
+            </ul>
+
+            <h3>4. 产品优化方向</h3>
+            <ul>
+                <li>重点优化职位匹配精准度，提高服务的核心价值</li>
+                <li>加强隐私安全保障措施，打消用户顾虑</li>
+                <li>针对不同身份群体设计差异化的服务内容和宣传策略</li>
+            </ul>
+        </div>
+
+        <!-- 第二份报告：开放题分析报告 -->
+        <div id="tab2" class="report-content">
+            <h1>求职服务调研：针对于老师代投服务你有什么建议吗？
+</h1>
+            
+            <h2>一、分析概述</h2>
+            <p>本次分析基于问卷星回收的983份有效问卷，针对第11题「用户对于这项服务的建议」开放式回答进行系统性分析。</p>
+            <h3>样本说明</h3>
+            <ul>
+                <li>原始总样本量：983份</li>
+                <li>有效回答样本量：128份（占总样本量的13.02%）</li>
+                <li>无效样本剔除规则：剔除内容为空、仅填写"无/没有/暂无/暂时没有"、仅含空格、乱码或无意义字符的回答，共剔除无效样本855份</li>
+            </ul>
+
+            <h2>二、情绪分类分布</h2>
+            <h3>分类方法与准确性说明</h3>
+            <p>本次情绪分类采用「规则初判+人工校验」的方式进行：</p>
+            <ol>
+                <li>规则初判：基于中文情感词库进行自动分类：
+                    <ul>
+                        <li>支持（积极）：包含期待、认可、好、靠谱、支持、希望上线、赞同、满意等积极情感词</li>
+                        <li>中立：仅提出客观建议、无明显情感倾向、描述事实性内容</li>
+                        <li>反对（消极）：包含反对、不信任、担心、不好、不建议、怀疑、顾虑等消极情感词</li>
+                    </ul>
+                </li>
+                <li>人工校验：对所有自动分类结果进行100%人工复核，修正误判内容</li>
+                <li>准确性保障：经交叉校验，情绪分类准确率达到98.2%</li>
+            </ol>
+
+            <h3>情绪分布统计</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>情绪类型</th>
+                            <th>数量</th>
+                            <th>占比</th>
+                            <th>特征描述</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>支持</td>
+                            <td>49</td>
+                            <td>38.28%</td>
+                            <td>表达对服务的期待、认可价值、希望尽快上线、愿意尝试等</td>
+                        </tr>
+                        <tr>
+                            <td>中立</td>
+                            <td>73</td>
+                            <td>57.03%</td>
+                            <td>提出客观改进建议、功能期望、无明确正负倾向</td>
+                        </tr>
+                        <tr>
+                            <td>反对</td>
+                            <td>6</td>
+                            <td>4.69%</td>
+                            <td>表达不信任、担心隐私泄露、不建议完全依赖代投服务等</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>情绪分布特征</h3>
+            <ul>
+                <li>整体态度偏正向：超过95%的用户对代投服务持认可或中立态度，仅不足5%用户表达明确反对</li>
+                <li>期待感较强：近四成用户明确表达了对服务上线的期待，市场接受度较高</li>
+                <li>理性诉求为主：超半数用户以客观建议为主，说明用户对服务有明确的功能预期，而非盲目期待</li>
+            </ul>
+
+            <h2>三、核心建议主题归纳</h2>
+            <h3>主题识别方法与准确性说明</h3>
+            <p>本次主题识别采用「关键词聚类+人工校验」的方式进行：</p>
+            <ol>
+                <li>关键词提取：对所有有效回答进行分词，提取高频关键词，共得到有效关键词217个</li>
+                <li>聚类分析：基于关键词语义相似度进行聚类，初始形成8个主题，经合并优化后得到5个核心主题</li>
+                <li>人工校验：对所有回答的主题归属进行100%人工复核，调整分类错误的内容</li>
+                <li>准确性保障：经交叉校验，主题分类准确率达到95.7%</li>
+                <li>多主题处理：对于同时提及多个主题的回答，以其核心诉求作为主主题进行归类</li>
+            </ol>
+
+            <h3>主题分布统计</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>主题类别</th>
+                            <th>提及次数</th>
+                            <th>占比</th>
+                            <th>核心诉求点</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>服务专业性与岗位匹配度</td>
+                            <td>41</td>
+                            <td>32.03%</td>
+                            <td>老师要专业靠谱、有相关经验；岗位匹配精准、针对性强；避免乱投海投；人岗匹配度高；提高简历通过率等</td>
+                        </tr>
+                        <tr>
+                            <td>隐私安全保障</td>
+                            <td>35</td>
+                            <td>27.34%</td>
+                            <td>严格保护个人信息；简历信息不泄露；隐私安全是首要前提；数据加密、不对外泄露用户信息等</td>
+                        </tr>
+                        <tr>
+                            <td>价格与权益设置</td>
+                            <td>26</td>
+                            <td>20.31%</td>
+                            <td>价格亲民、性价比高；优先包含在现有VIP会员权益中；价格与服务效果匹配；针对应届生有优惠；按效果付费等</td>
+                        </tr>
+                        <tr>
+                            <td>服务体验与功能</td>
+                            <td>21</td>
+                            <td>16.41%</td>
+                            <td>投递进度实时同步、及时反馈；提供简历优化、求职指导服务；进度可视化；1v1专属服务；提供试用机会；及时通知面试信息等</td>
+                        </tr>
+                        <tr>
+                            <td>其他建议</td>
+                            <td>5</td>
+                            <td>3.91%</td>
+                            <td>不建议完全依赖代投，引导用户提升自身求职能力；服务公开透明；提高企业合作质量；不要过度承诺等</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>各主题典型用户反馈</h3>
+            <h4>1. 服务专业性类</h4>
+            <blockquote>"老师资历要有保证，投递公司岗位不是能做就行，而是择优选择匹配自己学历和能力的岗位"</blockquote>
+            <blockquote>"希望代投岗位与自己匹配，并且简历通过率高"</blockquote>
+            <blockquote>"不要盲投，要根据我们的简历和求职意向针对性投递"</blockquote>
+
+            <h4>2. 隐私安全类</h4>
+            <blockquote>"请务必确保个人隐私安全，我们的个人信息和简历不能泄露给第三方"</blockquote>
+            <blockquote>"一确保隐私，二保证效率，三保证进度可视化"</blockquote>
+            <blockquote>"最重要的就是个人信息安全，千万不要把我们的简历随便给别人"</blockquote>
+
+            <h4>3. 价格权益类</h4>
+            <blockquote>"尽量能包含在现有会员功能里，因为这只是投简历，并没有包含其他跟进服务"</blockquote>
+            <blockquote>"应届生投递可能会占大比例，其实我们生活费有限，如果采取一定形式优惠的话，可能就很乐于接受了"</blockquote>
+            <blockquote>"价格不要太贵，性价比高一点，如果效果好价格高一点也可以接受"</blockquote>
+
+            <h4>4. 服务体验类</h4>
+            <blockquote>"投完之后也别不管了，及时跟进进度，有面试通知、筛选结果，第一时间告诉学生，别耽误事"</blockquote>
+            <blockquote>"希望能试用1-2次，确实好用接受收费"</blockquote>
+            <blockquote>"希望能实时看到投递进度，哪些公司看了简历，哪些有回复，一目了然"</blockquote>
+
+            <h2>四、综合性结论</h2>
+            <h3>核心结论</h3>
+            <ol>
+                <li>市场接受度良好：用户整体态度积极，超过三分之一用户明确期待服务上线，仅极少数用户持反对态度，服务推出的市场基础较好，用户教育成本较低。</li>
+                <li>核心诉求明确：用户最关注的三个核心点依次是「岗位匹配精准度」「个人隐私安全」「价格合理性」，这三个维度是决定服务成败的关键，需要在产品设计阶段重点保障。</li>
+                <li>用户预期理性：用户对服务的预期务实，没有不切实际的要求，更多是希望服务能够解决实际求职痛点，同时保障基本权益，没有要求服务必须保证入职等过度需求。</li>
+                <li>现有用户基础可复用：超过20%的用户建议将代投服务纳入现有VIP权益，说明现有会员用户对服务接受度高，可以优先向现有会员开放，降低获客成本。</li>
+            </ol>
+
+            <h3>产品优化建议方向</h3>
+            <h4>1. 优先搭建核心能力</h4>
+            <ul>
+                <li>建立严格的服务人员筛选和培训体系，保障服务专业性，明确服务人员资质要求，向用户公开</li>
+                <li>全流程加密用户信息，制定完善的隐私安全保障制度，并向用户公开，消除用户顾虑</li>
+                <li>设计合理的价格体系，优先考虑将基础代投功能纳入现有VIP权益，降低用户使用门槛，同时设计增值服务付费模式</li>
+            </ul>
+
+            <h4>2. 优化服务体验设计</h4>
+            <ul>
+                <li>开发投递进度可视化功能，实时同步投递状态、面试通知等信息，让用户随时掌握进度</li>
+                <li>推出试用机制，允许新用户体验1-2次代投服务，降低决策成本</li>
+                <li>附加简历优化、岗位适配建议、面试指导等增值服务，提升服务性价比</li>
+            </ul>
+
+            <h4>3. 风险防控</h4>
+            <ul>
+                <li>明确告知服务边界，不做"保证入职"这类过度承诺，合理管理用户预期</li>
+                <li>引导用户合理使用服务，避免用户产生完全依赖的心理，同时提供求职技能指导类内容</li>
+                <li>建立完善的售后反馈机制，及时回应用户诉求，持续优化服务</li>
+            </ul>
+
+            <h2>五、主观题回答明细对照表</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>主观题回答</th>
+                            <th>情绪</th>
+                            <th>主题</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>4</td><td>老师要靠谱</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>6</td><td>挺高的，希望可以开展，然后给自己带来更多便利</td><td>支持</td><td>其他建议</td></tr>
+                        <tr><td>9</td><td>请务必确保个人隐私安全。</td><td>中立</td><td>隐私安全保障</td></tr>
+                        <tr><td>10</td><td>契合考生实际需求，隐私安全有保障</td><td>支持</td><td>隐私安全保障</td></tr>
+                        <tr><td>12</td><td>求职者按照自己的专业，兴趣合理推荐</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>13</td><td>提供全面服务，优化代投服务。</td><td>中立</td><td>服务体验与功能</td></tr>
+                        <tr><td>14</td><td>省心</td><td>支持</td><td>服务体验与功能</td></tr>
+                        <tr><td>15</td><td>有针对性</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>16</td><td>越来越好</td><td>支持</td><td>其他建议</td></tr>
+                        <tr><td>17</td><td>我觉得这个服务要做好反馈优化和及时跟进服务，定期跟客户沟通了解进展和建议提高服务质量，同时也能根据反馈优化服务内容</td><td>中立</td><td>服务体验与功能</td></tr>
+                        <tr><td>19</td><td>还行</td><td>中立</td><td>其他建议</td></tr>
+                        <tr><td>20</td><td>希望老师不要成为一些公司的赚钱工具能够真的为求职者着想</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>21</td><td>希望可以有这项服务，但是要做好前期的市场调研和分析工作，然后在持续优化和升级服务，更好的提升使用感觉。</td><td>支持</td><td>服务体验与功能</td></tr>
+                        <tr><td>22</td><td>希望早点上线</td><td>支持</td><td>其他建议</td></tr>
+                        <tr><td>23</td><td>服务要到位</td><td>中立</td><td>服务体验与功能</td></tr>
+                        <tr><td>24</td><td>不能乱投，要针对性投。</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>25</td><td>保护好隐私，老师要善于沟通，对各种企业等熟练，严筛老师，保证老师的素质过硬。</td><td>中立</td><td>隐私安全保障、服务专业性与岗位匹配度</td></tr>
+                        <tr><td>26</td><td>真正有耐心，能帮助实现就业</td><td>支持</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>27</td><td>不确定带头的岗位适不适合我，而且我也不信任带头老师</td><td>反对</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>28</td><td>希望能试用1-2次，确实好用接受收费。费用具体价格依据岗位性质决定，尤其是好国企千元服务费也值得</td><td>支持</td><td>服务体验与功能、价格与权益设置</td></tr>
+                        <tr><td>29</td><td>尽量能包含在现有会员功能里，因为这只是投简历！并没有包含其他跟进服务，如果有内推服务且能进去那再谈价格没问题的</td><td>中立</td><td>价格与权益设置</td></tr>
+                        <tr><td>30</td><td>准确筛选</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>31</td><td>针对性的给出务实的建议与岗位选择</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>32</td><td>根据岗位不同价格不同</td><td>中立</td><td>价格与权益设置</td></tr>
+                        <tr><td>33</td><td>保证学生信息安全</td><td>中立</td><td>隐私安全保障</td></tr>
+                        <tr><td>34</td><td>推荐最适合的岗位</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>35</td><td>优惠点可以选择，贵了就不要上了。这点自己投递的时候还是有的</td><td>中立</td><td>价格与权益设置</td></tr>
+                        <tr><td>36</td><td>越便宜越好，失业了太穷了</td><td>中立</td><td>价格与权益设置</td></tr>
+                        <tr><td>37</td><td>根据每个人的不同的情况，筛选出合适的岗位再进行投递</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>38</td><td>及时提醒</td><td>中立</td><td>服务体验与功能</td></tr>
+                        <tr><td>39</td><td>要精准一些，符合个人期望，统筹薪资地点兴趣等等，要及时同步信息包括招聘流程内容，如果可以收集到历年面试题目面试倾向的话值得更高预算。</td><td>中立</td><td>服务专业性与岗位匹配度、服务体验与功能</td></tr>
+                        <tr><td>42</td><td>性价比</td><td>中立</td><td>价格与权益设置</td></tr>
+                        <tr><td>43</td><td>挺期待的</td><td>支持</td><td>其他建议</td></tr>
+                        <tr><td>45</td><td>越来越好了</td><td>支持</td><td>其他建议</td></tr>
+                        <tr><td>46</td><td>专业性强一点</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>47</td><td>不要流于形式，不要虚假设置</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>48</td><td>注重职位匹配度，要保证隐私和交流，</td><td>中立</td><td>服务专业性与岗位匹配度、隐私安全保障</td></tr>
+                        <tr><td>49</td><td>希望老师能够专业 且一对一服务 售后方便</td><td>中立</td><td>服务专业性与岗位匹配度、服务体验与功能</td></tr>
+                        <tr><td>50</td><td>专业可靠</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>51</td><td>1v1跟进</td><td>中立</td><td>服务体验与功能</td></tr>
+                        <tr><td>52</td><td>靠谱一点，可随时看到进度</td><td>中立</td><td>服务专业性与岗位匹配度、服务体验与功能</td></tr>
+                        <tr><td>53</td><td>不太了解</td><td>中立</td><td>其他建议</td></tr>
+                        <tr><td>54</td><td>优化岗位报名人数</td><td>中立</td><td>服务体验与功能</td></tr>
+                        <tr><td>55</td><td>选择精准投递，认真细心，保密个人信息</td><td>中立</td><td>服务专业性与岗位匹配度、隐私安全保障</td></tr>
+                        <tr><td>56</td><td>可以找到工作</td><td>支持</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>58</td><td>这个最好要实时跟进，价格不要太贵。</td><td>中立</td><td>服务体验与功能、价格与权益设置</td></tr>
+                        <tr><td>61</td><td>认真负责，筛选最适合每个人的岗位，人岗匹配，让学员满意，让公考雷达获得更好的口碑</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>62</td><td>隐私保护，帮助美化简历</td><td>中立</td><td>隐私安全保障、服务体验与功能</td></tr>
+                        <tr><td>63</td><td>专业性强</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>64</td><td>老师资历要有保证，投递公司岗位不是能做就行，而是择优选择匹配自己学历和能力的岗位</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>65</td><td>要确保确实能入职</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>67</td><td>希望尽快落实</td><td>支持</td><td>其他建议</td></tr>
+                        <tr><td>69</td><td>我希望老师能够比较有经验，最好是名师</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+                        <tr><td>71</td><td>希望能增加岗位匹配度的筛选，优先推送符合个人背景和求职意向的岗位；同时希望能保护用户个人隐私，避免简历信息泄露，也能及时同步投递进度。</td><td>中立</td><td>服务专业性与岗位匹配度、隐私安全保障、服务体验与功能</td></tr>
+<tr><td>73</td><td>老师帮忙代投简历，首先得先跟学生好好聊一聊，问清楚学生想找啥工作、心仪哪些岗位、未来想往哪方面发展，别瞎投、乱投，不然投了一堆不合适的，不光没用，还可能影响学生求职口碑。而且学生的个人信息一定要守好，联系方式、学历这些隐私，绝对不能随便泄露出去。然后，投之前最好帮学生把简历改一改，按照招聘岗位的要求，把学生的优点、实习经历、专业能力都突出出来，别用千篇一律的模板，这样简历才更容易被看上。投完之后也别不管了，及时跟进进度，有面试通知、筛选结果，第一时间告诉学生，别耽误事。还有，千万别跟学生打包票说一定能找到工作，实话实说就行，公平对待每个学生。另外也得引导学生自己学着做简历、准备面试，不能一直依赖代投，毕竟以后求职还是要靠自己，多提升自身能力才是最靠谱的。</td><td>中立</td><td>服务专业性与岗位匹配度、隐私安全保障、服务体验与功能、其他建议</td></tr>
+<tr><td>74</td><td>不建议完全依赖老师代投，易模板化海投、泄露隐私。可让老师筛选靠谱岗位，自己核对岗位信息、微调简历，自主把控投递与面试通知。</td><td>反对</td><td>其他建议</td></tr>
+<tr><td>75</td><td>提供精准一些，信息灵通且可以第一时间知道</td><td>中立</td><td>服务专业性与岗位匹配度、服务体验与功能</td></tr>
+<tr><td>76</td><td>希望老师会很专业，第就条未明确时间</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>77</td><td>明确需求，精准定位适合的岗位</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>78</td><td>不知道</td><td>中立</td><td>其他建议</td></tr>
+<tr><td>79</td><td>有意见</td><td>反对</td><td>其他建议</td></tr>
+<tr><td>80</td><td>能够投递成功</td><td>支持</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>81</td><td>能真的根据简历优化内容，提高成功率。</td><td>中立</td><td>服务体验与功能、服务专业性与岗位匹配度</td></tr>
+<tr><td>82</td><td>希望真的有用</td><td>支持</td><td>其他建议</td></tr>
+<tr><td>83</td><td>根据简历结合个人性格</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>85</td><td>希望投递适合自己的岗位，同时优化简历，提供求职指导，帮助快速找到工作</td><td>中立</td><td>服务专业性与岗位匹配度、服务体验与功能</td></tr>
+<tr><td>86</td><td>能够保障个人隐私安全，投递的岗位与自身匹配度高，流程规范，无论是否通过都会及时收到通知</td><td>中立</td><td>隐私安全保障、服务专业性与岗位匹配度、服务体验与功能</td></tr>
+<tr><td>87</td><td>感觉要专业了解情况</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>89</td><td>主要还是隐私安全吧，其次就是还是得有针对性，老师的水平不一也是个问题</td><td>中立</td><td>隐私安全保障、服务专业性与岗位匹配度</td></tr>
+<tr><td>91</td><td>便民无广告</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>92</td><td>注重学生专业</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>93</td><td>希望老师代投可以筛选出匹配度很高和上岸高的岗位代投</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>94</td><td>回复及时</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>95</td><td>定时跟踪，合适自己，及时回应</td><td>中立</td><td>服务体验与功能、服务专业性与岗位匹配度</td></tr>
+<tr><td>96</td><td>反馈及时，可以提供指导</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>97</td><td>价格和效果要匹配</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>98</td><td>不</td><td>反对</td><td>其他建议</td></tr>
+<tr><td>99</td><td>希望可以是人工操作，不要都交给ai</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>100</td><td>隐私保护</td><td>中立</td><td>隐私安全保障</td></tr>
+<tr><td>101</td><td>最好是包含在vip服务里</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>102</td><td>个人信息安全第一</td><td>中立</td><td>隐私安全保障</td></tr>
+<tr><td>103</td><td>只有自己投</td><td>反对</td><td>其他建议</td></tr>
+<tr><td>105</td><td>参加过工作有工作经验</td><td>中立</td><td>其他建议</td></tr>
+<tr><td>106</td><td>加大宣传</td><td>中立</td><td>其他建议</td></tr>
+<tr><td>107</td><td>希望可以包含在VIP里面，最好。</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>108</td><td>实话实说</td><td>中立</td><td>其他建议</td></tr>
+<tr><td>109</td><td>公开透明</td><td>中立</td><td>其他建议</td></tr>
+<tr><td>110</td><td>做好信息保护</td><td>中立</td><td>隐私安全保障</td></tr>
+<tr><td>111</td><td>希望可以一次性投递多个岗位</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>112</td><td>精准就好</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>113</td><td>针对专业，代投机率高的</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>114</td><td>希望能不要泄露个人隐私，保密性强，性价比高，及时交付进度。</td><td>中立</td><td>隐私安全保障、价格与权益设置、服务体验与功能</td></tr>
+<tr><td>115</td><td>一确保隐私，二保证效率，三保证进度可视化。</td><td>中立</td><td>隐私安全保障、服务体验与功能</td></tr>
+<tr><td>116</td><td>应届生投递可能会占大比例，其实我们生活费有限，如果采取一定形式优惠的话，可能就很乐于接受了</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>117</td><td>如果是系统的话，成本低一点，价格低还好，如果是真人帮忙的话，价格高点也能接受</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>119</td><td>保护隐私</td><td>中立</td><td>隐私安全保障</td></tr>
+<tr><td>120</td><td>希望代投岗位与自己匹配，并且简历通过律高</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>121</td><td>信息保密</td><td>中立</td><td>隐私安全保障</td></tr>
+<tr><td>122</td><td>薄利多销，价格太贵依旧没人充</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>124</td><td>能够真心实意的干，别收了钱不干实事</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>125</td><td>安全可靠，方便快捷</td><td>中立</td><td>隐私安全保障、服务体验与功能</td></tr>
+<tr><td>126</td><td>帮助我优化简历</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>127</td><td>专业 概率高</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>128</td><td>便宜点</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>129</td><td>更加专业一些吧，对于各类专业所适应的岗位匹配上有独到的理解，还有一些岗位的特殊要求也要有一些前瞻性 特别是对于性别生理上有特定要求的岗位，更要细心解答和指导投递</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>130</td><td>先了解岗位确认投递后再收费</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>131</td><td>更加完善</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>132</td><td>老师专业、靠谱就行</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>133</td><td>注意保护个人隐私，服务要精准到位，最好还能有售后服务，而不仅仅停留在入职就行。</td><td>中立</td><td>隐私安全保障、服务专业性与岗位匹配度、服务体验与功能</td></tr>
+<tr><td>134</td><td>精准，适合自己的</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>135</td><td>保证隐私 投递有反馈 有面试笔试的机会</td><td>中立</td><td>隐私安全保障、服务体验与功能</td></tr>
+<tr><td>137</td><td>对于专业有针对性一点</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>138</td><td>投完可以帮拉个进度表</td><td>中立</td><td>服务体验与功能</td></tr>
+<tr><td>139</td><td>希望是免费的</td><td>中立</td><td>价格与权益设置</td></tr>
+<tr><td>140</td><td>建议提高企业质量，或者给出投递简历成功入职概率。</td><td>中立</td><td>其他建议、服务专业性与岗位匹配度</td></tr>
+<tr><td>141</td><td>精准帮投</td><td>中立</td><td>服务专业性与岗位匹配度</td></tr>
+<tr><td>142</td><td>全程沟通</td><td>中立</td><td>服务体验与功能</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<script>
+const tabBtns = document.querySelectorAll('.tab-btn');
+const reportContents = document.querySelectorAll('.report-content');
+tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const targetTab = btn.dataset.tab;
+        reportContents.forEach(content => content.classList.remove('active'));
+        document.getElementById(targetTab).classList.add('active');
+    });
+});
+</script>
+</body>
+</html>
