@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国央企数据摸底数据分析报告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+    scroll-behavior: smooth;
+}
+
+/* 固定顶部导航栏样式 */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    padding: 12px 20px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.navbar-logo {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+}
+
+.navbar-links a:hover {
+    color: #f39c12;
+    border-bottom-color: #f39c12;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f7fa;
+    padding-top: 60px;
+}
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 标题区 */
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .header-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        /* 目录导航 */
+        .toc {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .toc h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1e3c72;
+            border-left: 4px solid #2a5298;
+            padding-left: 12px;
+        }
+
+        .toc ul {
+            list-style: none;
+            columns: 2;
+            gap: 10px;
+        }
+
+        .toc ul li {
+            margin-bottom: 8px;
+        }
+
+        .toc ul li a {
+            color: #2a5298;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .toc ul li a:hover {
+            color: #f39c12;
+            padding-left: 4px;
+        }
+
+        /* 核心数据总览区 */
+        .overview {
+            margin-bottom: 40px;
+        }
+
+        .overview h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1e3c72;
+            border-left: 4px solid #f39c12;
+            padding-left: 12px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid #2a5298;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .card.highlight {
+            border-top-color: #f39c12;
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 8px;
+        }
+
+        .card.highlight .card-value {
+            color: #f39c12;
+        }
+
+        .card-desc {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* 内容区 */
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            font-size: 24px;
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e6ed;
+        }
+
+        .section h3 {
+            font-size: 20px;
+            color: #2a5298;
+            margin: 25px 0 15px;
+        }
+
+        .section h4 {
+            font-size: 16px;
+            color: #34495e;
+            margin: 20px 0 10px;
+        }
+
+        .section p {
+            margin-bottom: 12px;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .section ul, .section ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section li {
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 15px;
+        }
+
+        /* 表格样式 */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e6ed;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e0e6ed;
+            font-size: 14px;
+            color: #555;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* 对比结论高亮 */
+        .conclusion {
+            background: #f0f7ff;
+            border-left: 4px solid #2a5298;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .conclusion strong {
+            color: #1e3c72;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .toc ul {
+                columns: 1;
+            }
+
+            .content {
+                padding: 25px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    /* 导航栏响应式适配 */
+    @media (max-width: 768px) {
+        .navbar-container {
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .navbar-logo {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .navbar-links {
+            justify-content: center;
+            gap: 15px;
+        }
+
+        body {
+            padding-top: 100px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .navbar-links a {
+            font-size: 12px;
+        }
+
+        body {
+            padding-top: 110px;
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- 固定顶部导航栏 -->
+    <div class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">国央企数据分析报告</a>
+            <div class="navbar-links">
+                <a href="#overview">核心总览</a>
+                <a href="#user-profile">用户画像</a>
+                <a href="#user-path">用户路径</a>
+                <a href="#ctr">功能分析</a>
+                <a href="#conclusion">结论建议</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <!-- 标题区 -->
+        <div class="header">
+            <h1>国央企数据摸底数据分析报告</h1>
+            <div class="header-meta">
+                <div><strong>版本限制：</strong>APP6400版本 · 国央企功能专项分析</div>
+                <div><strong>数据周期：</strong>2026年4月1日 - 2026年5月6日</div>
+                <div><strong>新用户定义：</strong>2026年4月1日 - 2026年5月6日注册的用户</div>
+                <div><strong>老用户定义：</strong>2026年4月1日之前注册的用户</div>
+            </div>
+        </div>
+
+        <!-- 目录导航 -->
+        <div class="toc">
+            <h2>目录导航</h2>
+            <ul>
+                <li><a href="#overview">核心数据总览（20260401-20260506）</a></li>
+                <li><a href="#user-profile">一、用户画像分析</a></li>
+                <li><a href="#user-path">二、用户路径</a></li>
+                <li><a href="#ctr">三、功能点击率计算</a></li>
+                <li><a href="#conclusion">结论建议</a></li>
+            </ul>
+        </div>
+
+        <!-- 核心数据总览区 -->
+        <div class="overview" id="overview">
+            <h2>核心数据总览（20260401-20260506）</h2>
+            <div class="cards-grid">
+                <div class="card highlight">
+                    <div class="card-title">不区分版本日活平均值</div>
+                    <div class="card-value">849,287</div>
+                    <div class="card-desc">升级6400版本用户占比78%</div>
+                </div>
+                <div class="card highlight">
+                    <div class="card-title">国央企板块日均访问UV</div>
+                    <div class="card-value">80,147</div>
+                    <div class="card-desc">升级6400版本活跃用户575916、进入独立板块占比14%</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">集团详情页日均访问UV</div>
+                    <div class="card-value">26,210</div>
+                    <div class="card-desc">占国央企板块日均UV大约33%</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">企业详情页访问UV</div>
+                    <div class="card-value">25,110</div>
+                    <div class="card-desc">占国央企板块日均UV大约31%</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">国央企-企业tab日均UV</div>
+                    <div class="card-value">45,106</div>
+                    <div class="card-desc">企业卡片日均点击27,181，60%的人会点击</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">国央企-职位tab日均UV</div>
+                    <div class="card-value">35,425</div>
+                    <div class="card-desc">职位卡片日均点击19,093，54%的人会点击</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细内容区 -->
+        <div class="content">
+            <!-- 用户画像分析 -->
+            <div class="section" id="user-profile">
+                <h2>一、用户画像分析</h2>
+                <p>>样本总数定义：版本≥6400 数据范围0401-0506的活跃用户 而且是有简历的</p>
+                <h4>1、性别</h4>
+                <p>总样本数3562249，剔除了未知性别的数据，剔除数据占18%，未进入国央企指数据范围内未访问国央企页面</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>进入国央企</th>
+                                <th>未进入国央企</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>男性</td>
+                                <td>43.61%</td>
+                                <td>39.21%</td>
+                            </tr>
+                            <tr>
+                                <td>女性</td>
+                                <td>56.39%</td>
+                                <td>60.79%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>对比结论</strong></p>
+                    <ul>
+                        <li>男性用户：进入国央企板块的占比（43.61%）高于未进入用户中的占比（39.21%），相对偏好度更高。</li>
+                        <li>女性用户：进入国央企板块的占比（56.39%）低于未进入用户中的占比（60.79%），相对参与度偏低。</li>
+                        <li>整体趋势：尽管女性用户是公考雷达APP的主体（未进入中占60.79%），但在国央企板块首月行为中，男性用户的相对渗透率显著提升（+4.4个百分点），暗示男性对国央企岗位/板块的潜在需求更强。女性可能更偏爱公职板块</li>
+                    </ul>
+                </div>
+
+                <h4>2、工作年限</h4>
+                <p>总样本数3560199，剔除了工作年限-1和未填写的无效数据，无效样本数占比39.7%，未进入国央企指数据范围内未访问国央企页面</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>进入国央企 (%)</th>
+                                <th>未进入国央企 (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0年</td>
+                                <td>47.95%</td>
+                                <td>57.04%</td>
+                            </tr>
+                            <tr>
+                                <td>1-2年</td>
+                                <td>26.48%</td>
+                                <td>22.73%</td>
+                            </tr>
+                            <tr>
+                                <td>3-5年</td>
+                                <td>18.18%</td>
+                                <td>15.00%</td>
+                            </tr>
+                            <tr>
+                                <td>6-10年</td>
+                                <td>6.61%</td>
+                                <td>4.80%</td>
+                            </tr>
+                            <tr>
+                                <td>11年以上</td>
+                                <td>0.79%</td>
+                                <td>0.44%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>对比结论</strong></p>
+                    <ol>
+                        <li>应届生/新手占比高，但进入国央企的比例相对低
+                            <ul>
+                                <li>两类用户中“0年”占比均最高，但未进入国央企的0年用户（57.04%）显著高于已进入者（47.95%）。</li>
+                            </ul>
+                        </li>
+                        <li>有工作经验用户更容易进入国央企
+                            <ul>
+                                <li>进入国央企的用户在“1-2年”“3-5年”“6-10年”及“11年以上”各段占比均高于未进入者，尤其“1-2年”高出近4个百分点。</li>
+                            </ul>
+                        </li>
+                        <li>大量用户未填写工作年限（-1占比高）
+                            <ul>
+                                <li>进入国央企中缺失比例约43.5%，未进入中约38.0%。</li>
+                                <li>需求：优化注册/个人资料填写流程（如智能推断、奖励引导），完善用户画像以支撑精细化运营。</li>
+                            </ul>
+                        </li>
+                        <li>资深工作经验（11年以上）用户极少，但价值高
+                            <ul>
+                                <li>占比不足1%，但可能为高端人才。</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <h4>3、学校招生批次</h4>
+                <p>总样本数3560199，剔除了学校招生批次为空白的数据，剔除数据占比39.8%，未进入国央企指数据范围内未访问国央企页面</p>
+                <p>一本1033781、二本718998、三本163172、专科226621</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>进入国央企</th>
+                                <th>未进入国央企</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>一本院校</td>
+                                <td>47.32%</td>
+                                <td>48.73%</td>
+                            </tr>
+                            <tr>
+                                <td>二本院校</td>
+                                <td>33.04%</td>
+                                <td>33.83%</td>
+                            </tr>
+                            <tr>
+                                <td>三本院校</td>
+                                <td>7.40%</td>
+                                <td>7.73%</td>
+                            </tr>
+                            <tr>
+                                <td>专科院校</td>
+                                <td>12.24%</td>
+                                <td>9.71%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>对比结论</strong></p>
+                    <ol>
+                        <li>专科院校用户更倾向于使用国央企板块：进入国央企的专科生占比（12.24%）显著高于未进入国央企用户中的专科生占比（9.71%），差值达2.53个百分点。说明专科生对国央企岗位的关注度和投递意愿更强。可能更关注国央企一线岗或者派遣岗</li>
+                        <li>本科各批次用户占比在两组中差异较小：一本、二本、三本院校的占比表明本科生的行为差异不显著。</li>
+                    </ol>
+                </div>
+
+                <h4>4、是否择业期</h4>
+                <p>总样本数3560199，剔除了是否择业其为未知的数据，剔除数据占比28.9%，未进入国央企指数据范围内未访问国央企页面</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>进入国央企</th>
+                                <th>未进入国央企</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>择业期（是）</td>
+                                <td>59.70%</td>
+                                <td>56.80%</td>
+                            </tr>
+                            <tr>
+                                <td>择业期（否）</td>
+                                <td>40.30%</td>
+                                <td>43.20%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>对比结论</strong></p>
+                    <ol>
+                        <li>择业期用户占比对比 进入国央企的用户中，处于择业期的比例（59.7%）显著高于未进入国央企的用户（56.8%），高出约 2.9个百分点。说明当前国央企板块对正处于求职择业期的用户吸引力更强，他们更主动地关注和尝试国央企机会。</li>
+                        <li>非择业期用户 未进入国央企的用户中，非择业期比例（43.2%）略高于进入国央企的用户（40.3%），可能包含已稳定就业或暂不求职的人群，他们对国央企板块的探索性较低。</li>
+                    </ol>
+                </div>
+
+                <h4>5、学历</h4>
+                <p>总样本数3560199，几乎都填写了学历字段。未进入国央企指数据范围内未访问国央企页面</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>进入国央企</th>
+                                <th>未进入国央企</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>高中</td>
+                                <td>0.07%</td>
+                                <td>0.07%</td>
+                            </tr>
+                            <tr>
+                                <td>中专</td>
+                                <td>0.07%</td>
+                                <td>0.06%</td>
+                            </tr>
+                            <tr>
+                                <td>专科</td>
+                                <td>9.86%</td>
+                                <td>7.80%</td>
+                            </tr>
+                            <tr>
+                                <td>高职本科</td>
+                                <td>0.56%</td>
+                                <td>0.53%</td>
+                            </tr>
+                            <tr>
+                                <td>普通本科</td>
+                                <td>73.75%</td>
+                                <td>77.05%</td>
+                            </tr>
+                            <tr>
+                                <td>硕士研究生</td>
+                                <td>15.48%</td>
+                                <td>14.30%</td>
+                            </tr>
+                            <tr>
+                                <td>博士研究生</td>
+                                <td>0.20%</td>
+                                <td>0.18%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>对比结论</strong></p>
+                    <ol>
+                        <li>（硕士/专科）更倾向关注国央企：
+                            <ul>
+                                <li>硕士研究生：进入国央企群体的占比（15.48%）显著高于未进入群体（14.30%），相对高出1.18个百分点。表明硕士学历用户对国央企岗位的兴趣或匹配度更高，可能因国央企技术/管理岗对硕士需求较强。</li>
+                                <li>专科：进入群体的占比（9.86%）明显高于未进入群体（7.80%），相对高出2.06个百分点。反映国央企基层操作岗（如生产、运维类）对专科生的吸纳能力较强，符合其技能型岗位结构。</li>
+                            </ul>
+                        </li>
+                        <li>普通本科用户占主体，但未进入群体比例略高：
+                            <ul>
+                                <li>普通本科在两组中均为最大群体（进入组73.75%，未进入组77.05%），但未进入群体占比更高（+3.30个百分点）。说明普通本科用户虽总量大，但对国央企的关注度相对分散，可能因更倾向公务员考试或市场化就业。</li>
+                            </ul>
+                        </li>
+                        <li>其他学历差异微弱：
+                            <ul>
+                                <li>高职本科、博士研究生在进入群体中占比略高（分别+0.03、+0.02个百分点），但绝对值低（均<0.6%），差异不显著。</li>
+                                <li>高中、中专、未知学历占比均低于0.1%，对整体分布影响可忽略。</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <h4>6、从业类型</h4>
+                <p>总样本数3562249，剔除了的数据，剔除数据占比28.9%，未进入国央企指数据范围内未访问国央企页面</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>进入国央企</th>
+                                <th>未进入国央企</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>事业单位工作人员</td>
+                                <td>1.50%</td>
+                                <td>2.50%</td>
+                            </tr>
+                            <tr>
+                                <td>留学回国人员</td>
+                                <td>0.10%</td>
+                                <td>0.10%</td>
+                            </tr>
+                            <tr>
+                                <td>三资、民营等企业工作人员</td>
+                                <td>3.50%</td>
+                                <td>3.00%</td>
+                            </tr>
+                            <tr>
+                                <td>其他人员</td>
+                                <td>4.50%</td>
+                                <td>4.80%</td>
+                            </tr>
+                            <tr>
+                                <td>国有企业工作人员</td>
+                                <td>2.20%</td>
+                                <td>1.80%</td>
+                            </tr>
+                            <tr>
+                                <td>自由职业者</td>
+                                <td>1.60%</td>
+                                <td>1.60%</td>
+                            </tr>
+                            <tr>
+                                <td>未知</td>
+                                <td>64.60%</td>
+                                <td>64.00%</td>
+                            </tr>
+                            <tr>
+                                <td>国家公务人员</td>
+                                <td>0.20%</td>
+                                <td>0.40%</td>
+                            </tr>
+                            <tr>
+                                <td>应届毕业生</td>
+                                <td>16.60%</td>
+                                <td>16.40%</td>
+                            </tr>
+                            <tr>
+                                <td>待业人员</td>
+                                <td>5.20%</td>
+                                <td>5.30%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>对比结论</strong></p>
+                    <ul>
+                        <li>应届毕业生：进入国央企用户中占比（16.6%）略高于未进入群体（16.4%），是国央企板块的重点活跃人群。</li>
+                        <li>待业人员：两者占比接近（5.2% vs 5.3%），待业人员对国央企岗位有稳定需求。</li>
+                        <li>三资、民营等企业工作人员：进入国央企用户中占3.5%，高于未进入的3.0%，表明该群体有较强的“从民营/外资转向国央企”的意愿。</li>
+                        <li>事业单位工作人员：进入国央企用户中仅占1.5%，显著低于未进入的2.5%，可能因事业单位本身已属体制内，跨系统流动意愿较低。</li>
+                        <li>国有企业工作人员：进入用户中占2.2%，略高于未进入的1.8%，部分国企员工可能在寻求内部跳槽或更优的国企岗位。</li>
+                        <li>国家公务人员：进入用户中仅0.2%，远低于未进入的0.4%，公务员转向国央企的动力不足（可能因职业稳定性差异）。</li>
+                    </ul>
+                    <p><strong>共性特征</strong>：“未知”从业类型占比均超过64%，说明绝大多数用户未填写职业信息，这是当前数据质量的最大短板，也意味着用户画像不够精准。</p>
+                </div>
+            </div>
+
+            <!-- 用户路径 -->
+            <div class="section" id="user-path">
+                <h2>二、用户路径</h2>
+
+                <h4>1、国央企上线是否对日活有帮助</h4>
+                <p>注：时间2026.04.01至2026.05.06</p>
+                <p>分析这4个页面的用户分布情况：晒分填写页、公告模式、职位模式、央国企页面</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>页面名称</th>
+                                <th>老用户（占比）</th>
+                                <th>新用户（占比）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                              <tr>
+                                <td>晒分填写页</td>
+                                <td>8.74%</td>
+                                <td>11.26%</td>
+                            </tr>
+                            <tr>
+                                <td>公告模式</td>
+                                <td>40.89%</td>
+                                <td>34.54%</td>
+                            </tr>
+                            <tr>
+                                <td>职位模式</td>
+                                <td>34.28%</td>
+                                <td>35.33%</td>
+                            </tr>
+                            <tr>
+                                <td>国央企</td>
+                                <td>16.09%</td>
+                                <td>18.87%</td>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>核心结论</strong></p>
+                    <p>国央企板块的访问分布：</p>
+                    <ul>
+                        <li>老用户：16.09%</li>
+                        <li>新用户：18.87%</li>
+                    </ul>
+                    <p>结论：国央企板块在新用户中的访问比例高于老用户，说明该板块对新用户有一定吸引力，有助于提升新用户的首次活跃深度。</p>
+                    <p>公告模式 / 职位模式的分布，远高于国央企板块</p>
+                    <p><strong>结论</strong>：国央企板块<strong>尚未成为主流使用路径</strong>，对日活的直接贡献有限，但属于<strong>增量探索内容</strong>。</p>
+                    <p>对日活有帮助但有限且偏新用户驱动，未成为高频访问页面，对整体日活提升幅度较小</p>
+                </div>
+
+                <h4>2、国央企首页渗透</h4>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>页面名称</th>
+                                <th>老用户</th>
+                                <th>新用户</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>公告模式（首页内渗透率）</td>
+                                <td>38.39%</td>
+                                <td>41.95%</td>
+                            </tr>
+                            <tr>
+                                <td>职位模式（首页内渗透率）</td>
+                                <td>32.18%</td>
+                                <td>42.92%</td>
+                            </tr>
+                            <tr>
+                                <td>国央企（首页内渗透率）</td>
+                                <td>15.12%</td>
+                                <td>22.94%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p><strong>核心结论</strong></p>
+                    <p><strong>结论</strong>：新用户对首页各入口的点击意愿均高于老用户，说明新用户处于“探索期”，首页是重要的分流枢纽。</p>
+                    <p><strong>结论</strong>：国央企<strong>尚未成为首页的主流点击路径</strong>，但新用户对其兴趣大于老用户，存在潜在增长空间。</p>
+                    <ul>
+                        <li><strong>正向</strong>：国央企为首页增加了新的内容tab，吸引了约<strong>1/5的新用户点击</strong>，提升了新用户的首页互动深度，对<strong>新用户留存</strong>有积极意义。</li>
+                        <li><strong>局限</strong>：老用户渗透率仅15%，且全局访问占比低（7–9%），<strong>难以成为拉动整体日活的核心功能</strong>。</li>
+                    </ul>
+                </div>
+
+                <h4>3、用户进入国央企板块的路径及心理</h4>
+                <p>1、新老用户访问国央企页面的上一级页面分布</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度（来源页面）</th>
+                                <th>老用户（占比）</th>
+                                <th>新用户</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>引导卡片：适合的国企</td>
+                                <td>23.49%</td>
+                                <td>31.65%</td>
+                            </tr>
+                            <tr>
+                                <td>首页：国央企tab</td>
+                                <td>76.51%</td>
+                                <td>68.35%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <ul>
+                    <li><strong>老用户</strong>：76.51% 从首页国央企tab进入</li>
+                    <li><strong>新用户</strong>：68.35% 从首页国央企tab进入</li>
+                </ul>
+                <p>两者均以首页tab为首要入口，但<strong>老用户的比例更高</strong>（高出约8个百分点）</p>
+
+                <p>之前数据显示：</p>
+                <ul>
+                    <li>老用户首页内渗透率（国央企）仅 <strong>15.12%</strong>，新用户 <strong>22.94%</strong></li>
+                    <li>但这里显示，<strong>一旦进入国央企</strong>，老用户中高达76.51%是通过首页tab来的</li>
+                </ul>
+
+                <div class="conclusion">
+                    <p>这说明：</p>
+                    <ul>
+                        <li><strong>老用户不爱点首页国央企tab</strong>（渗透率低），但<strong>点了之后，国央企页面几乎全是从这里来的</strong> → 行为模式是：偶尔点一次首页tab，点了就直接进国央企，很少通过其他路径绕进来。</li>
+                        <li><strong>新用户更愿意从首页探索</strong>（渗透率高），但进入国央企的方式相对多元，引导卡片作用更大（31.65% vs 老用户23.49%）。</li>
+                    </ul>
+                </div>
+
+                <p>2、新老用户访问国央企职位详情的上一级页面分布</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>维度</th>
+                                <th>老用户</th>
+                                <th>新用户</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>公告-职位列表</td>
+                                <td>35.21%</td>
+                                <td>21.67%</td>
+                            </tr>
+                            <tr>
+                                <td>职位模式</td>
+                                <td>13.50%</td>
+                                <td>21.53%</td>
+                            </tr>
+                            <tr>
+                                <td>国央企</td>
+                                <td>9.86%</td>
+                                <td>8.86%</td>
+                            </tr>
+                            <tr>
+                                <td>企业详情</td>
+                                <td>5.32%</td>
+                                <td>7.27%</td>
+                            </tr>
+                            <tr>
+                                <td>集团详情</td>
+                                <td>2.43%</td>
+                                <td>3.36%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <ul>
+                        <li><strong>老用户</strong>更倾向于从「公告-职位列表」进入（35.21%），该比例显著高于新用户（21.67%），表明老用户习惯通过传统公告列表浏览职位。</li>
+                        <li><strong>新用户</strong>则更偏好「职位模式」（21.53% vs 13.50%）和「企业详情」（7.27% vs 5.32%），说明新用户更依赖职位聚合推荐或先了解企业再查看职位。</li>
+                        <li>「国央企」和「集团详情」两类来源在两群体中占比接近，差异较小。</li>
+                    </ul>
+                </div>
+
+                <h4>4、功能点击率 (CTR) 对比：新用户的交互意愿更弱</h4>
+                <p>卡片类型：企业卡片点击率显著高于职位卡片</p>
+                <ul>
+                    <li>新用户：国央企-企业卡片 CTR（5.68%）比国央企-职位卡片（3.34%）高出2.34 个百分点</li>
+                    <li>老用户：国央企-企业卡片 CTR（7.07%）比国央企-职位卡片（4.27%）高出2.80 个百分点</li>
+                    <li>无论新老用户，国央企-企业卡片吸引力远大于国央企-职位卡片，是用户更偏好的浏览入口。</li>
+                </ul>
+
+                <p>用户分层：全场景下老用户 CTR 均高于新用户</p>
+                <ul>
+                    <li>职位卡片：老用户比新用户高 0.93 个百分点</li>
+                    <li>企业卡片：老用户比新用户高 1.39 个百分点</li>
+                    <li>规律一致：<strong>老用户对国央企板块的点击意愿、探索意愿更强</strong>；新用户对板块认知陌生，点击积极性偏弱；且企业卡片会进一步拉大新老用户的点击率差距。</li>
+                </ul>
+
+                <p>职位卡片CTR对比：国央企职位卡片 CTR低于职位卡片CTR</p>
+                <p>与往期对比：职位卡片平均 CTR 达 9.86%，公告卡片平均CTR达4.72%；公告模式CTR7.39%、职位模式5.31%</p>
+                <p>国央企板块内职位卡片CTR：老用户4.27%、新用户3.34%</p>
+                <p>国央企板块内企业卡片CTR：老用户7.07%、新用户5.68%</p>
+
+                <div class="conclusion">
+                    <p><strong>用户浏览心智差异</strong>：公考雷达核心用户找国央企岗位，习惯<strong>先选意向企业、再看旗下具体职位</strong>，企业主体信息比单一职位信息更能勾起点击兴趣；</p>
+                    <p><strong>新老用户认知差</strong>：老用户熟悉平台功能、求职目标清晰，主动筛选国央企意愿强；新用户对国央企板块布局、岗位价值不了解，被动浏览居多、点击谨慎；</p>
+                </div>
+
+                <h4>5、用户毕业时间交叉对比</h4>
+                <p><strong>注</strong>：“毕业时间之前”指用户筛选毕业时间≤2026-07-01，通常对应社招人群；“之后”对应校招人群。括号内为各招录类型点击占比。</p>
+                <p>一、筛选“企业”时，两类人群都喜欢什么招录类型？</p>
+                <ul>
+                    <li>社招人群（毕业时间≤2026-07-01）：最喜欢 校招（占比51.22%）</li>
+                    <li>校招人群（毕业时间≥2026-07-02）：最喜欢 校招（占比56.66%）</li>
+                </ul>
+                <p> 结论：无论社招还是校招用户，在筛选企业时，都更倾向于看“校招”类型的企业。</p>
+
+                <p>二、筛选“职位”时，两类人群喜欢什么招录类型？</p>
+                <ul>
+                    <li>社招人群：最喜欢 社招（占比55.81%）</li>
+                    <li>校招人群：最喜欢 校招（占比56.18%）</li>
+                </ul>
+                <p> 结论：</p>
+                <ul>
+                    <li>社招用户筛选职位时，更想看社招职位。</li>
+                    <li>校招用户筛选职位时，更想看校招职位。</li>
+                </ul>
+
+                <div class="conclusion">
+                    <p><strong>核心洞察</strong>：</p>
+                    <ul>
+                        <li>企业列表：校招内容对<strong>所有人</strong>都有吸引力（可能因为国企/央企校招岗位多）。</li>
+                        <li>职位列表：用户更关注<strong>匹配自身身份</strong>的招录类型。</li>
+                    </ul>
+                </div>
+
+                <h4>6、按毕业时间交叉对比（企业筛选包情况）</h4>
+                <p>1. 20260701前毕业人群分析</p>
+                <p>总UV：<strong>26200</strong></p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>筛选维度</th>
+                                <th>UV总和</th>
+                                <th>占总UV比例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>企业性质</td>
+                                <td>6939</td>
+                                <td>26.48%</td>
+                            </tr>
+                            <tr>
+                                <td>招录类型</td>
+                                <td>6698</td>
+                                <td>25.56%</td>
+                            </tr>
+                            <tr>
+                                <td>职位类型</td>
+                                <td>4494</td>
+                                <td>17.15%</td>
+                            </tr>
+                            <tr>
+                                <td>企业规模</td>
+                                <td>3891</td>
+                                <td>14.85%</td>
+                            </tr>
+                            <tr>
+                                <td>行业</td>
+                                <td>3179</td>
+                                <td>12.13%</td>
+                            </tr>
+                            <tr>
+                                <td>上市情况</td>
+                                <td>999</td>
+                                <td>3.81%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>2. 20260701后毕业人群分析</p>
+                <p>总UV：<strong>2789</strong></p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>筛选维度</th>
+                                <th>UV总和</th>
+                                <th>占总UV比例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>企业性质</td>
+                                <td>926</td>
+                                <td>33.20%</td>
+                            </tr>
+                            <tr>
+                                <td>职位类型</td>
+                                <td>552</td>
+                                <td>19.79%</td>
+                            </tr>
+                            <tr>
+                                <td>招录类型</td>
+                                <td>522</td>
+                                <td>18.72%</td>
+                            </tr>
+                            <tr>
+                                <td>行业</td>
+                                <td>405</td>
+                                <td>14.52%</td>
+                            </tr>
+                            <tr>
+                                <td>企业规模</td>
+                                <td>282</td>
+                                <td>10.11%</td>
+                            </tr>
+                            <tr>
+                                <td>上市情况</td>
+                                <td>102</td>
+                                <td>3.66%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <ol>
+                        <li><strong>核心关注维度一致</strong>：两个群体中，<strong>企业性质</strong>都是用户最关注的筛选维度，0701后人群的关注度占比提升了6.72个百分点</li>
+                        <li><strong>关注度变化趋势</strong>：0701后毕业人群对<strong>职位类型</strong>和<strong>行业</strong>的关注度占比也有所上升</li>
+                        <li><strong>关注度下降明显</strong>：对<strong>招录类型</strong>和<strong>企业规模</strong>的关注度占比在0701后人群中下降明显</li>
+                        <li><strong>稳定维度</strong>：<strong>上市情况</strong>的占比基本保持稳定，在3.6%-3.8%之间</li>
+                        <li><strong>用户规模差异</strong>：整体UV总量0701后人群比0701前人群下降了约89.35%，符合毕业时间划分的用户规模预期</li>
+                    </ol>
+                </div>
+
+                <h4>7、按毕业时间交叉对比（职位筛选包情况）</h4>
+                <p>1. 20260701前毕业人群分析</p>
+                <p>总UV：<strong>57319</strong></p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>筛选维度</th>
+                                <th>UV总和</th>
+                                <th>占总UV比例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>学历要求</td>
+                                <td>15372</td>
+                                <td>26.82%</td>
+                            </tr>
+                            <tr>
+                                <td>经验要求</td>
+                                <td>9546</td>
+                                <td>16.65%</td>
+                            </tr>
+                            <tr>
+                                <td>薪资范围</td>
+                                <td>7366</td>
+                                <td>12.85%</td>
+                            </tr>
+                            <tr>
+                                <td>招录类型</td>
+                                <td>6644</td>
+                                <td>11.59%</td>
+                            </tr>
+                            <tr>
+                                <td>招录状态</td>
+                                <td>6124</td>
+                                <td>10.68%</td>
+                            </tr>
+                            <tr>
+                                <td>企业性质</td>
+                                <td>5661</td>
+                                <td>9.88%</td>
+                            </tr>
+                            <tr>
+                                <td>职位类型</td>
+                                <td>4198</td>
+                                <td>7.32%</td>
+                            </tr>
+                            <tr>
+                                <td>上市情况</td>
+                                <td>1707</td>
+                                <td>2.98%</td>
+                            </tr>
+                            <tr>
+                                <td>企业规模</td>
+                                <td>701</td>
+                                <td>1.22%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>2. 20260701后毕业人群分析</p>
+                <p>总UV：<strong>5022</strong></p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>筛选维度</th>
+                                <th>UV总和</th>
+                                <th>占总UV比例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>学历要求</td>
+                                <td>1511</td>
+                                <td>30.09%</td>
+                            </tr>
+                            <tr>
+                                <td>经验要求</td>
+                                <td>737</td>
+                                <td>14.68%</td>
+                            </tr>
+                            <tr>
+                                <td>薪资范围</td>
+                                <td>651</td>
+                                <td>12.96%</td>
+                            </tr>
+                            <tr>
+                                <td>企业性质</td>
+                                <td>587</td>
+                                <td>11.69%</td>
+                            </tr>
+                            <tr>
+                                <td>招录类型</td>
+                                <td>545</td>
+                                <td>10.85%</td>
+                            </tr>
+                            <tr>
+                                <td>职位类型</td>
+                                <td>490</td>
+                                <td>9.76%</td>
+                            </tr>
+                            <tr>
+                                <td>招录状态</td>
+                                <td>372</td>
+                                <td>7.41%</td>
+                            </tr>
+                            <tr>
+                                <td>上市情况</td>
+                                <td>88</td>
+                                <td>1.75%</td>
+                            </tr>
+                            <tr>
+                                <td>企业规模</td>
+                                <td>41</td>
+                                <td>0.82%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <ol>
+                        <li><strong>核心关注维度一致</strong>：两个群体中，<strong>学历要求</strong>和<strong>经验要求</strong>都是用户最关注的筛选维度，合计占比超过50%</li>
+                        <li><strong>关注度变化趋势</strong>：0701后毕业人群对<strong>学历要求</strong>的关注度占比明显提升，而对<strong>招录类型</strong>和<strong>招录状态</strong>的关注度占比有所下降</li>
+                        <li><strong>企业相关维度占比低</strong>：企业性质、企业规模、上市情况等企业相关筛选维度在职位筛选中的占比普遍较低，合计不足10%</li>
+                        <li><strong>用户规模差异</strong>：整体UV总量0701后人群比0701前人群下降了约89%，符合毕业时间划分的用户规模预期</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- 功能点击率计算 -->
+            <div class="section" id="ctr">
+                <h2>三、功能点击率计算</h2>
+
+                <h3>集团详情页面（总UV：943,565）</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>功能</th>
+                                <th>点击UV</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>点击集团详情tab按钮</td>
+                                <td>296,538</td>
+                                <td><strong>31.43%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击集团详情收藏</td>
+                                <td>6,091</td>
+                                <td><strong>0.65%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击集团详情分享</td>
+                                <td>3,619</td>
+                                <td><strong>0.38%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击集团详情导航</td>
+                                <td>2,190</td>
+                                <td><strong>0.23%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>企业详情页面（总UV：903,992）</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>功能</th>
+                                <th>点击UV</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>点击企业详情tab按钮</td>
+                                <td>613,989</td>
+                                <td><strong>67.92%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击企业详情收藏</td>
+                                <td>11,819</td>
+                                <td><strong>1.31%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击企业详情分享</td>
+                                <td>5,492</td>
+                                <td><strong>0.61%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击企业详情导航</td>
+                                <td>17,067</td>
+                                <td><strong>1.89%</strong></td>
+                            </tr>
+                            <tr>
+                                <td>点击企业详情所属集团按钮</td>
+                                <td>115,107</td>
+                                <td><strong>12.73%</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion">
+                    <p>从功能点击率来看，<strong>企业详情页的整体用户活跃度显著高于集团详情页</strong>。</p>
+                    <p>企业详情页的tab按钮点击率达到67.92%，而集团详情页的tab点击率仅为31.43%，说明用户对具体企业的深度信息（如招聘岗位、公司介绍等）需求远大于对集团层面信息的关注。</p>
+                    <p>在收藏功能上，企业详情页的收藏率为1.31%，约为集团详情页（0.65%）的两倍，但两者绝对值都非常低，表明用户“标记关注”的意愿不强，或者收藏入口不够突出。</p>
+                    <p>分享行为方面，企业详情页分享率为0.61%，略高于集团详情页的0.38%，整体传播行为较少，国央企板块上线首月仍以用户个人浏览为主，社交裂变尚未形成。</p>
+                    <p>导航功能的差异最为悬殊：企业详情页导航率达到1.89%，是集团详情页（0.23%）的8倍以上。这说明用户对具体企业的线下位置（如面试、办事）有明确需求，而集团多为管理机构，实地导航需求很弱。</p>
+                    <p><strong>特别值得关注的是</strong>，企业详情页中“点击所属集团”按钮的占比高达12.73%。这意味着超过八分之一的企业详情页用户会主动了解该企业背后的集团背景，说明用户不仅关心单个企业，还希望获取集团实力、旗下其他企业等关联信息。</p>
+                    <ol>
+                        <li><strong>企业详情是用户行为主阵地</strong>：各项功能点击率均高于集团详情，尤其是tab内容贡献了67.9%的点击，应优先优化企业详情页。</li>
+                        <li><strong>“集团-企业”关联需求明确</strong>：12.73%的企业页用户点击进入集团，但集团页本身活跃度低，需强化双向导流和内容闭环。</li>
+                        <li><strong>导航功能在企业侧价值显著</strong>：1.89%的导航率在低频功能中表现突出</li>
+                        <li><strong>收藏/分享渗透率极低</strong>：均不足1.5%，需通过产品手段激发用户使用意愿。</li>
+                    </ol>
+                </div>
+
+                <h3>国央企板块</h3>
+                <p>企业排序情况：</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>UV</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>推荐</td>
+                                <td>3090</td>
+                                <td>9.40%</td>
+                            </tr>
+                            <tr>
+                                <td>适合职位最多</td>
+                                <td>18597</td>
+                                <td>56.58%</td>
+                            </tr>
+                            <tr>
+                                <td>最新</td>
+                                <td>11183</td>
+                                <td>34.02%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>职位排序情况：</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>UV</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>推荐</td>
+                                <td>3256</td>
+                                <td>5.51%</td>
+                            </tr>
+                            <tr>
+                                <td>匹配度</td>
+                                <td>28391</td>
+                                <td>48.00%</td>
+                            </tr>
+                            <tr>
+                                <td>最新</td>
+                                <td>16246</td>
+                                <td>27.47%</td>
+                            </tr>
+                            <tr>
+                                <td>距离优先</td>
+                                <td>11252</td>
+                                <td>19.02%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>企业tab排序筛选：32870/1623846=2.0%</p>
+                <p>企业tab地区筛选：204849/1623846=12.6%</p>
+                <p>企业tab招录类型筛选：48941/1623846=3.0%</p>
+                <p>企业tab筛选包：30669/1623846=1.9%</p>
+                <p>企业tab排行榜：10922/1623846=0.7%</p>
+                <p>职位tab排序筛选：59145/1275326=4.6% </p>
+                <p>职位tab地区筛选：185076/1275326=14.5% </p>
+                <p>职位tab招录类型筛选：56356/1275326=4.4% </p>
+                <p>职位tab筛选包：65487/1275326=5.1%</p>
+
+                <div class="conclusion">
+                    <p><strong>大多数用户都会使用地区筛选</strong></p>
+                </div>
+
+                <h3>集团详情功能：</h3>
+                <p>tab栏点击情况</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>tab</th>
+                                <th>占比</th>
+                                <th>UV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>主页</td>
+                                <td>37.72%</td>
+                                <td>111849</td>
+                            </tr>
+                            <tr>
+                                <td>下级企业</td>
+                                <td>26.28%</td>
+                                <td>77938</td>
+                            </tr>
+                            <tr>
+                                <td>职位</td>
+                                <td>32.39%</td>
+                                <td>96050</td>
+                            </tr>
+                            <tr>
+                                <td>宣讲会</td>
+                                <td>1.88%</td>
+                                <td>5564</td>
+                            </tr>
+                            <tr>
+                                <td>面经</td>
+                                <td>1.73%</td>
+                                <td>5137</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>职位tab排序情况</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>UV</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>匹配度</td>
+                                <td>4197</td>
+                                <td>57.60%</td>
+                            </tr>
+                            <tr>
+                                <td>推荐</td>
+                                <td>704</td>
+                                <td>9.66%</td>
+                            </tr>
+                            <tr>
+                                <td>最新</td>
+                                <td>514</td>
+                                <td>7.05%</td>
+                            </tr>
+                            <tr>
+                                <td>距离优先</td>
+                                <td>1871</td>
+                                <td>25.68%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3>企业详情功能：</h3>
+                <p>tab栏点击情况</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>tab</th>
+                                <th>占比</th>
+                                <th>UV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>主页</td>
+                                <td>41.23%</td>
+                                <td>253154</td>
+                            </tr>
+                            <tr>
+                                <td>职位</td>
+                                <td>40.32%</td>
+                                <td>247534</td>
+                            </tr>
+                            <tr>
+                                <td>招聘动态</td>
+                                <td>15.61%</td>
+                                <td>95861</td>
+                            </tr>
+                            <tr>
+                                <td>面经</td>
+                                <td>2.84%</td>
+                                <td>17440</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>职位tab排序情况</p>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>排序</th>
+                                <th>UV</th>
+                                <th>占比</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>匹配度</td>
+                                <td>2316</td>
+                                <td>64.67%</td>
+                            </tr>
+                            <tr>
+                                <td>推荐</td>
+                                <td>542</td>
+                                <td>15.14%</td>
+                            </tr>
+                            <tr>
+                                <td>最新</td>
+                                <td>723</td>
+                                <td>20.19%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 结论建议区 -->
+            <div class="section" id="conclusion">
+                <h2>结论建议</h2>
+                <div class="conclusion">
+                    <ol>
+                        <li><strong>用户运营层面</strong>：
+                            <ul>
+                                <li>重点关注男性、有1-5年工作经验、专科/硕士学历、择业期、民营/外资企业员工等核心群体，提供精准的岗位推荐服务</li>
+                                <li>优化注册/个人资料填写流程，通过智能推断、奖励引导等方式完善用户画像，解决从业类型、工作年限等字段缺失率高的问题</li>
+                                <li>针对不同用户群体制定差异化运营策略：新用户加大引导卡片曝光，老用户强化国央企tab的个性化内容推送</li>
+                            </ul>
+                        </li>
+                        <li><strong>产品优化层面</strong>：
+                            <ul>
+                                <li>突出企业卡片的曝光优先级，符合用户「先选企业、再看职位」的浏览心智，提升整体CTR</li>
+                                <li>强化地区筛选功能的便捷性，匹配大多数用户的筛选使用习惯</li>
+                                <li>优化收藏、分享等功能的入口位置和激励机制，提升用户参与度和传播度</li>
+                                <li>深化导航服务在企业详情页的应用，满足用户对企业线下位置的明确需求</li>
+                            </ul>
+                        </li>
+                        <li><strong>内容策略层面</strong>：
+                            <ul>
+                                <li>企业列表优先展示校招类型企业，匹配所有用户的普遍偏好</li>
+                                <li>职位列表根据用户毕业时间/身份智能匹配校招/社招内容，提升用户体验</li>
+                                <li>针对1-5年工作经验用户重点推送社招岗位和职业晋升相关内容，6年以上资深用户定向推送管理岗/技术专家岗机会</li>
+                            </ul>
+                        </li>
+                        <li><strong>未来迭代方向</strong>：
+                            <ul>
+                                <li>提升国央企板块在首页的曝光和渗透率，尤其是针对老用户群体，挖掘板块增长潜力</li>
+                                <li>优化集团详情页下级企业tab的职位卡片曝光策略，提升职位卡片CTR</li>
+                                <li>调整集团卡片在企业详情页的显示位置，提升集团相关内容的点击率</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
